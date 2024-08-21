@@ -20,3 +20,11 @@ Would expect the files to work in Windows XP, 7, 8 and 10 as well.
 2. Manually create DDF files and run the "makecab" command :-P 
 
 There are other scripts and examples, but none of the ones I found actually worked correctly. 
+
+## Enable running scripts!
+
+In order to run Powershell scripts, run the file [Set-ExecutionPolicy Unrestricted.bat](https://github.com/runeandre/create_cab/tree/main/Set-ExecutionPolicy/Set-ExecutionPolicy%20Unrestricted.bat)
+
+Or run the powershell command "Set-ExecutionPolicy Unrestricted".
+
+You can revert to default settings with "Set-ExecutionPolicy Default" and "Set-ExecutionPolicy Default All" for all scopes.
