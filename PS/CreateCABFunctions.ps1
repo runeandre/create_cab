@@ -5,23 +5,20 @@ function Create-CAB-DDF([string]$RootDir, [string]$CurrentDir){
 		$RootDirWithBackslash = "$($RootDir)\"
 		$ddfDir = $CurrentDir -Replace [regex]::Escape($RootDirWithBackslash),""
 		
-		$script:ddf += ".Set DestinationDir=$($ddfDir)" #`r`n
+		$script:ddf += ".Set DestinationDir=$($ddfDir)"
 	}
 	
 	# Add files in current folder to DDF
-	$script:ddf+=(Get-ChildItem -Path "$CurrentDir" -File -Name).ForEach({"""$($CurrentDir)\{0}""" -f $_}) #`r`n
+	$script:ddf+=(Get-ChildItem -Path "$CurrentDir" -File -Name).ForEach({"""$($CurrentDir)\{0}""" -f $_}) # Note that we add " around each file entry
 	
 	# Recursive call for each sub folder
 	(Get-ChildItem -Path "$CurrentDir" -Directory -Name).ForEach({ Create-CAB-DDF "$($RootDir)" "$($CurrentDir)\$_" })
 	
 	# Run at the end in the original function call, so we only do it once
 	if($RootDir -eq $CurrentDir){
-		# The ForEach loop for the files adds a space on the start of each line, so lets remove them.
-		$script:ddf = $script:ddf -Replace " `"","`""
-	
 		Write-Host " "
-		Write-Host "Write DDF content to the file ""$($PWD)\files.ddf"""
-		$script:ddf | Out-File "$($PWD)\files.ddf" -Encoding Ascii # IT'S REALLY IMPORTANT that we generate an ASCII (ANSI) text file. UTF8 causes errors
+		Write-Host "Write DDF content to the file ""$($PWD)\files.ddf"" (in the ASCII format)."
+		$script:ddf | Out-File "$($PWD)\files.ddf" -Encoding Ascii # IT'S REALLY IMPORTANT that we generate an ASCII text file. UTF8 causes errors
 		
 		Write-Host " "
 		Write-Host "Finished creating the DDF file!"
